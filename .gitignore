@@ -1,0 +1,17 @@
+# Playwright Reports
+playwright-report/
+test-results/
+
+# Allure Reports
+allure-results/
+allure-report/
+
+# Monocart Reports
+monocart-report/
+
+# Packages / Environment
+node_modules/
+.env
+
+# MacOS 
+.DS_Store
