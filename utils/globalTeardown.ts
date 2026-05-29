@@ -7,7 +7,7 @@ async function globalTeardown() {
     // Ensure directory exists meaning tests finished and allure generated its logs
     if (fs.existsSync(allureResultsDir)) {
         const executorData = {
-            name: "OffSpring Mac Executor", // the active operator string
+            name: "Hani-Offspring", // the active operator string
             type: "Local CLI Execution",
             buildOrder: 1,
             buildName: `Playwright E2E Run on ${process.env.ENV?.toUpperCase() || 'STAGING'}`,

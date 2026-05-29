@@ -1,55 +1,54 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './basePage';
 
 export class TrainingOptionsPage extends BasePage {
-    // 7-12 Age Group Training
-    readonly scholasticGroupTrainingBtn: Locator;
-    readonly scholasticPersonalTrainingBtn: Locator;
-    readonly scholasticSmallGroupTrainingBtn: Locator;
-    
-    // Pro Training
-    readonly collegiateProTrainingBtn: Locator;
-    
-    // Adult Training
-    readonly adultGroupTrainingBtn: Locator;
-    readonly adultPersonalTrainingBtn: Locator;
-    readonly adultSmallGroupTrainingBtn: Locator;
-    
-    // Special
-    readonly teamTrainingBtn: Locator;
-    readonly d1OnCampusBtn: Locator;
+
+    // 2. Locate elements inside Adult Training
+    readonly adultDescriptionText: Locator;
+    readonly adultLearnMoreLink: Locator;
+
+    // 3. Locate elements inside Scholastic (Youth) Training
+    readonly scholasticDescriptionText: Locator;
+    readonly scholasticLearnMoreLink: Locator;
+
+    // 4. Bottom CTAs
+    readonly findD1GlobalBtn: Locator;
 
     constructor(page: Page) {
         super(page);
-        this.scholasticGroupTrainingBtn = page.getByRole('button', { name: 'Group Training' }).first();
-        this.scholasticPersonalTrainingBtn = page.getByRole('button', { name: 'Personal Training' }).first();
-        this.scholasticSmallGroupTrainingBtn = page.getByRole('button', { name: 'Small Group Training' }).first();
-        
-        this.collegiateProTrainingBtn = page.getByRole('button', { name: 'collegiate & PRO TRAINING' });
-        
-        this.adultGroupTrainingBtn = page.getByRole('button', { name: 'Group Training' }).nth(2);
-        this.adultPersonalTrainingBtn = page.getByRole('button', { name: 'Personal Training' }).nth(1);
-        this.adultSmallGroupTrainingBtn = page.getByRole('button', { name: 'Small Group Training' }).nth(1);
-        
-        this.teamTrainingBtn = page.getByRole('button', { name: 'Team Training' });
-        this.d1OnCampusBtn = page.getByRole('button', { name: 'D1 On Campus' });
+
+        // Texts for Adult Staging
+        this.adultDescriptionText = page.getByText(/Our adult programs combine strength/i);
+        this.adultLearnMoreLink = page.locator('a[href*="adult-training"]').filter({ hasText: 'LEARN MORE' }).first();
+
+        // Texts for Scholastic Staging
+        this.scholasticDescriptionText = page.getByText(/We build the foundation for athletic success with age-appropriate/i);
+        this.scholasticLearnMoreLink = page.locator('a[href*="youth-training"]').filter({ hasText: 'LEARN MORE' }).first();
+
+        this.findD1GlobalBtn = page.getByRole('link', { name: /FIND A D1/i, exact: false }).last();
     }
 
-    async exploreScholasticTraining() {
-        await this.scholasticGroupTrainingBtn.click();
-        await this.scholasticPersonalTrainingBtn.click();
-        await this.scholasticSmallGroupTrainingBtn.click();
+    async verifyScholasticSection() {
+        await expect(this.scholasticDescriptionText).toBeVisible({ timeout: 10000 });
     }
 
-    async exploreProTraining() {
-        await this.collegiateProTrainingBtn.click();
+    async verifyAdultSection() {
+        await expect(this.adultDescriptionText).toBeVisible({ timeout: 10000 });
     }
 
-    async exploreAdultTraining() {
-        await this.adultGroupTrainingBtn.click();
-        await this.adultPersonalTrainingBtn.click();
-        await this.adultSmallGroupTrainingBtn.click();
-        await this.teamTrainingBtn.click();
-        await this.d1OnCampusBtn.click();
+    async navigateToScholasticLearnMore() {
+        await expect(this.scholasticLearnMoreLink).toBeVisible();
+        await this.scholasticLearnMoreLink.click();
+        
+        await this.page.waitForLoadState('domcontentloaded');
+        await expect(this.page).toHaveURL(/.*youth-training/i, { timeout: 10000 });
+    }
+
+    async navigateToAdultLearnMore() {
+        await expect(this.adultLearnMoreLink).toBeVisible();
+        await this.adultLearnMoreLink.click();
+        
+        await this.page.waitForLoadState('domcontentloaded');
+        await expect(this.page).toHaveURL(/.*adult-training/i, { timeout: 10000 });
     }
 }

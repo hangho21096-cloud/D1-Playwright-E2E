@@ -34,6 +34,10 @@ export default defineConfig({
 
   use: {
     headless: false,
+    viewport: null, // 1. Bỏ giới hạn kích thước viewport mặc định để full màn hình
+    launchOptions: {
+      args: ['--start-maximized'], // 2. Lệnh ép Chrome mở to hết cỡ ngay khi bật
+    },
     // Capture screenshot specifically on failure to attach to reports
     screenshot: 'only-on-failure',
     // Capture video of executions
