@@ -24,4 +24,4 @@ If any step is skipped or simplified, the answer is invalid.
 - MUST include realistic waits (waitForURL, waitForSelector)
 - MUST include assertions after each step
 - MUST NOT mock anything
-- MUST command by English
+- Language: All test cases, manuals, documentations, and code comments MUST be written in English.

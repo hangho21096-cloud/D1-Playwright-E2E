@@ -15,3 +15,6 @@ node_modules/
 
 # MacOS 
 .DS_Store
+
+# QA Artifacts
+.qa/artifacts/
